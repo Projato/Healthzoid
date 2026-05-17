@@ -147,26 +147,9 @@
             <p>Age : {{age}}</p>
             <p>Gender: {{gender}}</p>
 
-            {% if r==0 %}
             <div>
-              <p>Result:<i> NonDemented </i></p>
+              <p>Result:<i> {{ alzheimer_classes[r] }} </i></p>
             </div>
-
-            {% elif r==1 %}
-            <div>
-              <p>Result:<i> VeryMildDemented </i></p>
-            </div>
-
-            {% elif r==2 %}
-            <div>
-              <p>Result:<i> MildDemented </i></p>
-            </div>
-
-            {% else %}
-            <div>
-              <p>Result:<i> ModerateDemented </i></p>
-            </div>
-            {% endif %}
           </div>
         </div>
       </div>

@@ -26,6 +26,12 @@ parkinson_model = pickle.load(open('models/parkinson_trained_model.sav','rb'))
 # Configuring Flask
 UPLOAD_FOLDER = 'static/uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+ALZHEIMER_CLASSES = [
+    'NonDemented',
+    'VeryMildDemented',
+    'MildDemented',
+    'ModerateDemented',
+]
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -34,6 +40,7 @@ app.secret_key = "secret key"
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
 
 ############################################# BRAIN TUMOR FUNCTIONS ################################################
 
@@ -257,8 +264,17 @@ def resulta():
             pred = alzheimer_model.predict(img)
             pred = pred[0].argmax()
             print(pred)
-            # pb.push_sms(pb.devices[0],str(phone), 'Hello {},\nYour Alzheimer test results are ready.\nRESULT: {}'.format(firstname,['NonDemented','VeryMildDemented','MildDemented','ModerateDemented'][pred]))
-            return render_template('resulta.html', filename=filename, fn=firstname, ln=lastname, age=age, r=0, gender=gender)
+            # pb.push_sms(pb.devices[0],str(phone), 'Hello {},\nYour Alzheimer test results are ready.\nRESULT: {}'.format(firstname, ALZHEIMER_CLASSES[pred]))
+            return render_template(
+                'resulta.html',
+                filename=filename,
+                fn=firstname,
+                ln=lastname,
+                age=age,
+                r=pred,
+                gender=gender,
+                alzheimer_classes=ALZHEIMER_CLASSES,
+            )
 
         else:
             flash('Allowed image types are - png, jpg, jpeg')
